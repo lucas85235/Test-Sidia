@@ -13,8 +13,9 @@ public class Player : MonoBehaviour
     private List<Tile> _currentWalkableTiles = new List<Tile>();
 
     public Action OnWalk;
-    public int CurrentHealth { get; set; }
-    public int CurrentAttack { get; set; }
+    public Tile Tile { get => _tile; }
+    public int CurrentHealth { get; private set; }
+    public int CurrentAttack { get; private set; }
 
     private void Awake()
     {
@@ -54,10 +55,16 @@ public class Player : MonoBehaviour
         _tile.occupant = gameObject;
     }
 
+    public void TakeDamage(int damage)
+    {
+        CurrentHealth -= damage;
+    }
+
     public void GetWalkableTiles()
     {
         _currentWalkableTiles = _grid.GetOrthogonallyNeighboringTiles(_tile);
-        _currentWalkableTiles.RemoveAll(item => item.occupant != null && item.occupant.CompareTag("Player") && item.occupant != gameObject);
+        var foundPlayers = _currentWalkableTiles.RemoveAll(item => item.occupant != null && item.occupant.CompareTag("Player") && item.occupant != gameObject);
+
         foreach (var item in _currentWalkableTiles)
         {
             item.SelectableMode(true);
