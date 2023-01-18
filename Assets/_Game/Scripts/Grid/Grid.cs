@@ -87,4 +87,25 @@ public class Grid : MonoBehaviour
 
         return neighboringTiles;
     }
+
+    public List<Tile> GetOrthogonallyNeighboringTiles(Tile tile)
+    {
+        var neighboringTiles = new List<Tile>();
+
+        // Get the coordinates of the tile
+        var tileRow = tile.row;
+        var tileColumn = tile.column;
+
+        if (tileRow > 0)
+            neighboringTiles.Add(Tiles[tileRow - 1][tileColumn]);
+        if (tileRow < rows - 1)
+            neighboringTiles.Add(Tiles[tileRow + 1][tileColumn]);
+
+        if (tileColumn > 0)
+            neighboringTiles.Add(Tiles[tileRow][tileColumn - 1]);
+        if (tileColumn < columns - 1)
+            neighboringTiles.Add(Tiles[tileRow][tileColumn + 1]);
+
+        return neighboringTiles;
+    }
 }

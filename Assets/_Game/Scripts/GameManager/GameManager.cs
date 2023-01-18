@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
         var rows = _grid.Tiles.FirstOrDefault().Length;
         var spawPoint = _grid.Tiles[0][Mathf.CeilToInt(rows / 2)];
 
-        Instantiate(player, spawPoint.transform.position + (Vector3.up * 1.25f), Quaternion.identity);
+        var spawPlayer = Instantiate(player, spawPoint.transform.position + (Vector3.up * 1.25f), Quaternion.identity) as Player;
+        spawPlayer.Init(_grid, spawPoint);
     }
 }
