@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ public class Player : MonoBehaviour
 
     private Grid _grid;
     private Tile _tile;
-    private List<Tile> _currentWalkableTiles;
+    private List<Tile> _currentWalkableTiles = new List<Tile>();
 
+    public Action OnWalk;
     public int CurrentHealth { get; set; }
     public int CurrentAttack { get; set; }
 
@@ -18,11 +20,6 @@ public class Player : MonoBehaviour
     {
         CurrentHealth = data.Health;
         CurrentAttack = data.Attack;
-    }
-
-    private void Start()
-    {
-        GetWalkableTiles();
     }
 
     private void Update()
@@ -57,7 +54,17 @@ public class Player : MonoBehaviour
         _tile.occupant = gameObject;
     }
 
-    public void WalkTo(Tile tile)
+    public void GetWalkableTiles()
+    {
+        _currentWalkableTiles = _grid.GetOrthogonallyNeighboringTiles(_tile);
+        _currentWalkableTiles.RemoveAll(item => item.occupant != null && item.occupant.CompareTag("Player") && item.occupant != gameObject);
+        foreach (var item in _currentWalkableTiles)
+        {
+            item.SelectableMode(true);
+        }
+    }
+
+    private void WalkTo(Tile tile)
     {
         if (_tile != null)
             _tile.occupant = null;
@@ -65,15 +72,6 @@ public class Player : MonoBehaviour
         _tile = tile;
         _tile.occupant = gameObject;
         transform.position = _tile.transform.position + (Vector3.up * 1.25f);
-        GetWalkableTiles();
-    }
-
-    private void GetWalkableTiles()
-    {
-        _currentWalkableTiles = _grid.GetOrthogonallyNeighboringTiles(_tile);
-        foreach (var item in _currentWalkableTiles)
-        {
-            item.SelectableMode(true);
-        }
+        OnWalk?.Invoke();
     }
 }

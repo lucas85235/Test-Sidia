@@ -14,7 +14,9 @@ public class Grid : MonoBehaviour
     [SerializeField] private Material tileMaterial1;
     [SerializeField] private Material tileMaterial2;
 
-    public Tile[][] Tiles;
+    public Tile[][] Tiles { get; private set; }
+    public int Rows { get => rows; }
+    public int Columns { get => columns; }
 
     public void Create()
     {

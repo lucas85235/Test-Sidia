@@ -237,8 +237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dffc9f0135e4757468c69d7c4d3fc253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 6
-  columns: 6
+  rows: 7
+  columns: 5
   tile: {fileID: 600565972078287491, guid: 2a07245ee3132104b94295c743ece01f, type: 3}
   tileMaterial1: {fileID: 2100000, guid: 3850029554b48c942a5c1392cd9e1dab, type: 2}
   tileMaterial2: {fileID: 2100000, guid: b213e24e6837f0f45a1c2ce9e918244f, type: 2}
