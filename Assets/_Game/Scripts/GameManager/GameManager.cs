@@ -155,8 +155,12 @@ public class GameManager : MonoBehaviour
 
         if (player1.CurrentHealth < 1 || player2.CurrentHealth < 1)
         {
-            Debug.Log($"Game Over");
             StopCoroutine(TurnControl());
+
+            if (player1.CurrentHealth > 0)
+                HUDCanvas.Instance.OpenGameOverPopup("Player 1 Win");
+            else HUDCanvas.Instance.OpenGameOverPopup("Player 2 Win");
+
             return false;
         }
 
