@@ -6,49 +6,85 @@ using UnityEngine;
 public class Grid : MonoBehaviour
 {
     [Header("Grid Size")]
-    [SerializeField][Min(2)] private int x = 6;
-    [SerializeField][Min(2)] private int y = 6;
+    [SerializeField][Min(2)] private int rows = 16;
+    [SerializeField][Min(2)] private int columns = 16;
 
     [Header("Settings")]
     [SerializeField] private Tile tile;
     [SerializeField] private Material tileMaterial1;
     [SerializeField] private Material tileMaterial2;
 
-    private Dictionary<int, List<Tile>> _tilesInGrid = new Dictionary<int, List<Tile>>();
-    public Dictionary<int, List<Tile>> Tiles { get => _tilesInGrid; }
+    public Tile[][] Tiles;
 
     public void Create()
     {
-        if (Tiles.Any()) return;
+        if (Tiles != null && Tiles.Length > 0) return;
 
+        Tiles = new Tile[rows][];
         var initialPosition = Vector3.zero;
         var tilesContainer = new GameObject("Tiles Container");
 
-        for (int i = 0; i < x; i++)
+        for (int iRow = 0; iRow < rows; iRow++)
         {
-            for (int j = 0; j < y; j++)
+            for (int iColumn = 0; iColumn < columns; iColumn++)
             {
                 var tilePosition = new Vector3(
-                    initialPosition.x + j,
+                    initialPosition.x + iColumn,
                     initialPosition.y,
-                    initialPosition.z + i
+                    initialPosition.z + iRow
                 );
 
-                var obj = Instantiate(tile, tilePosition, Quaternion.identity, tilesContainer.transform);
-                obj.name = $"Tile ({j}, {i})";
+                var obj = Instantiate(tile, tilePosition, Quaternion.identity, tilesContainer.transform) as Tile;
+                obj.name = $"Tile ({iColumn}, {iRow})";
+                obj.row = iRow;
+                obj.column = iColumn;
 
                 // Change tile colors interspersing between tileMaterial1 and tileMaterial2
                 var renderer = obj.GetComponent<Renderer>();
-                if ((j + i) % 2 == 0)
+                if ((iColumn + iRow) % 2 == 0)
                     renderer.sharedMaterial = tileMaterial1;
                 else renderer.sharedMaterial = tileMaterial2;
 
-                if (!_tilesInGrid.ContainsKey(x))
-                {
-                    _tilesInGrid.Add(x, new List<Tile>());
-                }
-                _tilesInGrid[x].Add(obj.GetComponent<Tile>());
+                if (Tiles[iRow] == null)
+                    Tiles[iRow] = new Tile[columns];
+
+                Tiles[iRow][iColumn] = obj;
             }
         }
+    }
+
+    public List<Tile> GetNeighboringTiles(Tile tile)
+    {
+        var neighboringTiles = new List<Tile>();
+
+        // Get the coordinates of the tile
+        var tileRow = tile.row;
+        var tileColumn = tile.column;
+
+        // Check if the neighboring tiles exist in the grid
+        if (tileRow > 0)
+        {
+            neighboringTiles.Add(Tiles[tileRow - 1][tileColumn]);
+            if (tileColumn > 0)
+                neighboringTiles.Add(Tiles[tileRow - 1][tileColumn - 1]);
+            if (tileColumn < columns - 1)
+                neighboringTiles.Add(Tiles[tileRow - 1][tileColumn + 1]);
+        }
+
+        if (tileRow < rows - 1)
+        {
+            neighboringTiles.Add(Tiles[tileRow + 1][tileColumn]);
+            if (tileColumn > 0)
+                neighboringTiles.Add(Tiles[tileRow + 1][tileColumn - 1]);
+            if (tileColumn < columns - 1)
+                neighboringTiles.Add(Tiles[tileRow + 1][tileColumn + 1]);
+        }
+
+        if (tileColumn > 0)
+            neighboringTiles.Add(Tiles[tileRow][tileColumn - 1]);
+        if (tileColumn < columns - 1)
+            neighboringTiles.Add(Tiles[tileRow][tileColumn + 1]);
+
+        return neighboringTiles;
     }
 }
