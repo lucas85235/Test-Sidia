@@ -16,15 +16,81 @@ public class GameManager : MonoBehaviour
     private GameObject _collectablesContainer;
     private List<Collectable> spawnedCollectables = new List<Collectable>();
     private int collectablesAmount;
-    private int player1Moves = 0;
-    private int player2Moves = 0;
+    private int turnCounter;
 
     // Turn control variables
+    private int player1Moves = 0;
+    private int Player1Moves
+    {
+        get => player1Moves;
+        set
+        {
+            player1Moves = value;
+            HUDCanvas.Instance.Player1.UpdateMoves(player1Moves, player1TurnMoves + 1);
+        }
+    }
+    private int player2Moves = 0;
+    private int Player2Moves
+    {
+        get => player2Moves;
+        set
+        {
+            player2Moves = value;
+            HUDCanvas.Instance.Player2.UpdateMoves(player2Moves, player2TurnMoves + 1, true);
+        }
+    }
+
     private int player1TurnMoves = 2;
+    private int Player1TurnMoves
+    {
+        get => player1TurnMoves;
+        set
+        {
+            player1TurnMoves = value;
+            HUDCanvas.Instance.Player1.UpdateMoves(player1Moves, player1TurnMoves + 1);
+        }
+    }
     private int player2TurnMoves = 2;
+    private int Player2TurnMoves
+    {
+        get => player2TurnMoves;
+        set
+        {
+            player2TurnMoves = value;
+            HUDCanvas.Instance.Player2.UpdateMoves(player2Moves, player2TurnMoves + 1, true);
+        }
+    }
     private int player1ExtraTurnDices = 0;
+    private int Player1ExtraTurnDices
+    {
+        get => player1ExtraTurnDices;
+        set
+        {
+            player1ExtraTurnDices = value;
+            HUDCanvas.Instance.Player1.UpdateDices(value + 3);
+        }
+    }
     private int player2ExtraTurnDices = 0;
+    private int Player2ExtraTurnDices
+    {
+        get => player2ExtraTurnDices;
+        set
+        {
+            player2ExtraTurnDices = value;
+            HUDCanvas.Instance.Player2.UpdateDices(value + 3, true);
+        }
+    }
+
     private int turnAttacks = 1;
+    private int TurnAttacks
+    {
+        get => turnAttacks;
+        set
+        {
+            turnAttacks = value;
+            HUDCanvas.Instance.UpdateTurnAttacks(value);
+        }
+    }
 
     public static GameManager Instance;
 
@@ -98,28 +164,34 @@ public class GameManager : MonoBehaviour
 
         while (_player1.CurrentHealth > 0 && _player2.CurrentHealth > 0)
         {
+            turnCounter++;
+            HUDCanvas.Instance.UpdateTurn(turnCounter);
+
+            // Reset Control Variables
+            TurnAttacks = 1;
+
+            Player1ExtraTurnDices = 0;
+            Player2ExtraTurnDices = 0;
+            Player1Moves = 0;
+            Player2Moves = 0;
+            Player1TurnMoves = 2;
+            Player2TurnMoves = 2;
+
             // Init Player 1 Can Walk
             _player1.GetWalkableTiles();
             _player1.enabled = true;
             _player2.enabled = false;
             FollowTargetCamera.Instance.SetTarget(_player1.transform);
-            yield return new WaitUntil(() => player1Moves > player1TurnMoves);
+            yield return new WaitUntil(() => Player1Moves > Player1TurnMoves);
 
             // Init Player 2 Can Walk
             _player2.GetWalkableTiles();
             _player2.enabled = true;
             _player1.enabled = false;
             FollowTargetCamera.Instance.SetTarget(_player2.transform);
-            yield return new WaitUntil(() => player2Moves > player2TurnMoves);
+            yield return new WaitUntil(() => Player2Moves > Player2TurnMoves);
 
-            // Reset Counters
-            player1Moves = 0;
-            player2Moves = 0;
-            player1TurnMoves = 2;
-            player2TurnMoves = 2;
-            player1ExtraTurnDices = 0;
-            player2ExtraTurnDices = 0;
-            turnAttacks = 1;
+
             _player2.enabled = false;
         }
     }
@@ -127,28 +199,28 @@ public class GameManager : MonoBehaviour
     #region Turn player 1 and 2 can move three times
     private async void CountPlayer1Moves()
     {
-        if (turnAttacks > 0)
+        if (TurnAttacks > 0)
         {
             var canContinue = await StartBattleCheck(_player1);
             if (!canContinue) return;
         }
 
-        player1Moves++;
-        if (player1Moves <= player1TurnMoves)
+        Player1Moves++;
+        if (Player1Moves <= Player1TurnMoves)
         {
             _player1.GetWalkableTiles();
         }
     }
     private async void CountPlayer2Moves()
     {
-        if (turnAttacks > 0)
+        if (TurnAttacks > 0)
         {
             var canContinue = await StartBattleCheck(_player2);
             if (!canContinue) return;
         }
 
-        player2Moves++;
-        if (player2Moves <= player2TurnMoves)
+        Player2Moves++;
+        if (Player2Moves <= Player2TurnMoves)
         {
             _player2.GetWalkableTiles();
         }
@@ -170,7 +242,7 @@ public class GameManager : MonoBehaviour
 
     private async Task<bool> StartBattle()
     {
-        turnAttacks--;
+        TurnAttacks--;
 
         var player1Dices = new List<int>();
         var player2Dices = new List<int>();
@@ -181,9 +253,9 @@ public class GameManager : MonoBehaviour
             player2Dices.Add(Random.Range(1, 7));
         }
 
-        for (int i = 0; i < player1ExtraTurnDices; i++)
+        for (int i = 0; i < Player1ExtraTurnDices; i++)
             player1Dices.Add(Random.Range(1, 7));
-        for (int i = 0; i < player2ExtraTurnDices; i++)
+        for (int i = 0; i < Player2ExtraTurnDices; i++)
             player2Dices.Add(Random.Range(1, 7));
 
         player1Dices.Sort((a, b) => b.CompareTo(a));
@@ -236,7 +308,7 @@ public class GameManager : MonoBehaviour
     #region Collectables Actions
     public void GainExtraTurnAttack()
     {
-        turnAttacks++;
+        TurnAttacks++;
     }
 
     public void GainExtraTurnMove(Target playerTarget)
@@ -244,10 +316,10 @@ public class GameManager : MonoBehaviour
         switch (playerTarget)
         {
             case Target.Player1:
-                player1TurnMoves++;
+                Player1TurnMoves++;
                 break;
             case Target.Player2:
-                player2TurnMoves++;
+                Player2TurnMoves++;
                 break;
         }
     }
@@ -257,10 +329,10 @@ public class GameManager : MonoBehaviour
         switch (playerTarget)
         {
             case Target.Player1:
-                player1ExtraTurnDices++;
+                Player1ExtraTurnDices++;
                 break;
             case Target.Player2:
-                player2ExtraTurnDices++;
+                Player2ExtraTurnDices++;
                 break;
         }
     }

@@ -15,10 +15,28 @@ public class Player : MonoBehaviour
     public Action OnWalk;
     public Tile Tile { get => _tile; }
     public Target targer { get; set; }
-    public int CurrentHealth { get; private set; }
-    public int CurrentAttack { get; private set; }
 
-    private void Awake()
+    private int _currentHealth;
+    public int CurrentHealth
+    {
+        get => _currentHealth; private set
+        {
+            _currentHealth = value;
+            GetPlayerHud().UpdateLife(value, targer == Target.Player2);
+        }
+    }
+    private int _currentAttack;
+    public int CurrentAttack
+    {
+        get => _currentAttack;
+        private set
+        {
+            _currentAttack = value;
+            GetPlayerHud().UpdateAttack(value, targer == Target.Player2);
+        }
+    }
+
+    private void Start()
     {
         CurrentHealth = data.Health;
         CurrentAttack = data.Attack;
@@ -58,10 +76,12 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        CurrentHealth -= damage;
-
-        if (CurrentAttack > data.Health)
+        if (CurrentHealth - damage > data.Health)
+        {
             CurrentHealth = data.Health;
+            return;
+        }
+        CurrentHealth -= damage;
     }
 
     public void GetWalkableTiles()
@@ -105,5 +125,12 @@ public class Player : MonoBehaviour
         }
 
         OnWalk?.Invoke();
+    }
+
+    private HUDCanvas.PlayerHUD GetPlayerHud()
+    {
+        if (targer == Target.Player1)
+            return HUDCanvas.Instance.Player1;
+        return HUDCanvas.Instance.Player2;
     }
 }
