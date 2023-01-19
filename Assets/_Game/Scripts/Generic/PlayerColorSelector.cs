@@ -1,65 +1,67 @@
 using UnityEngine;
 
-public class PlayerColorSelector : MonoBehaviour
+namespace Game.Generics
 {
-    public bool useSecondaryColor = false;
-    public Renderer playerRenderer;
-    public Color[] playerColors;
-    private static int currentColorIndex = 0;
-
-    private const string SELECTED_COLOR_INDEX_KEY = "selected_color_index";
-
-    private void Awake()
+    public class PlayerColorSelector : MonoBehaviour
     {
-        LoadSelectedColorIndex();
-        if (playerRenderer != null)
-            playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
-    }
+        [SerializeField] private bool useSecondaryColor = false;
+        [SerializeField] private Renderer playerRenderer;
+        [SerializeField] private Color[] playerColors;
 
-    public void NextColor()
-    {
-        currentColorIndex++;
-        if (currentColorIndex >= playerColors.Length)
-            currentColorIndex = 0;
+        private int _currentColorIndex = 0;
+        private const string SELECTED_COLOR_INDEX_KEY = "selected_color_index";
 
-        playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
-        SaveSelectedColorIndex();
-    }
-
-    public void PreviousColor()
-    {
-        currentColorIndex--;
-        if (currentColorIndex < 0)
-            currentColorIndex = playerColors.Length - 1;
-
-        playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
-        SaveSelectedColorIndex();
-    }
-
-    public Color GetCurrentColor()
-    {
-        return playerColors[currentColorIndex];
-    }
-
-    public Color GetAnalogColor()
-    {
-        int analogColorIndex = currentColorIndex + playerColors.Length / 2;
-        if (analogColorIndex >= playerColors.Length)
-            analogColorIndex -= playerColors.Length;
-
-        return playerColors[analogColorIndex];
-    }
-
-    private void SaveSelectedColorIndex()
-    {
-        PlayerPrefs.SetInt(SELECTED_COLOR_INDEX_KEY, currentColorIndex);
-    }
-
-    private void LoadSelectedColorIndex()
-    {
-        if (PlayerPrefs.HasKey(SELECTED_COLOR_INDEX_KEY))
+        private void Awake()
         {
-            currentColorIndex = PlayerPrefs.GetInt(SELECTED_COLOR_INDEX_KEY);
+            LoadSelectedColorIndex();
+            if (playerRenderer != null)
+                playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
         }
+
+        public void NextColor()
+        {
+            _currentColorIndex++;
+            if (_currentColorIndex >= playerColors.Length)
+                _currentColorIndex = 0;
+
+            playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
+            SaveSelectedColorIndex();
+        }
+        public void PreviousColor()
+        {
+            _currentColorIndex--;
+            if (_currentColorIndex < 0)
+                _currentColorIndex = playerColors.Length - 1;
+
+            playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
+            SaveSelectedColorIndex();
+        }
+
+        public Color GetCurrentColor()
+        {
+            return playerColors[_currentColorIndex];
+        }
+        public Color GetAnalogColor()
+        {
+            int analogColorIndex = _currentColorIndex + playerColors.Length / 2;
+            if (analogColorIndex >= playerColors.Length)
+                analogColorIndex -= playerColors.Length;
+
+            return playerColors[analogColorIndex];
+        }
+
+        #region Save and Load
+        private void SaveSelectedColorIndex()
+        {
+            PlayerPrefs.SetInt(SELECTED_COLOR_INDEX_KEY, _currentColorIndex);
+        }
+        private void LoadSelectedColorIndex()
+        {
+            if (PlayerPrefs.HasKey(SELECTED_COLOR_INDEX_KEY))
+            {
+                _currentColorIndex = PlayerPrefs.GetInt(SELECTED_COLOR_INDEX_KEY);
+            }
+        }
+        #endregion
     }
 }

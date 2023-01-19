@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicTracks:
-  - {fileID: 8300000, guid: 5d0b701e64afbc84c833259d9848089f, type: 3}
-  - {fileID: 8300000, guid: 881256e8df477054a818cfcf2210f9f7, type: 3}
+  - {fileID: 8300000, guid: 14a1cf915de1c2448b200ab123c01445, type: 3}
+  - {fileID: 8300000, guid: d9e280ca0b9d3ad4f83da6d4defd2c91, type: 3}
   soundEffects:
   - {fileID: 8300000, guid: b35a8d5eef240f644b86b09d172af202, type: 3}
   - {fileID: 8300000, guid: 651b33ffeb76c1940a0f8a4a4f60aa94, type: 3}

@@ -1,15 +1,17 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SinAnimation : MonoBehaviour
+namespace Game.Generics
 {
-    [Header("Move")]
-    [SerializeField] private float distance = 0.1f;
-    [SerializeField] private float speed = 2f;
-
-    private void FixedUpdate()
+    public class SinAnimation : MonoBehaviour
     {
-        transform.position = new Vector3(transform.position.x, Mathf.Sin(Time.time * speed) * distance, transform.position.z);
+        [Header("Move")]
+        [SerializeField] private float distance = 0.1f;
+        [SerializeField] private float speed = 2f;
+
+        private void FixedUpdate()
+        {
+            transform.position = new Vector3(transform.position.x, Mathf.Sin(Time.time * speed) * distance, transform.position.z);
+        }
     }
 }

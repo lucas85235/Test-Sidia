@@ -5,34 +5,37 @@ using UnityEngine.UI;
 using UnityEditor;
 #endif
 
-[ExecuteInEditMode]
-public class InspectorButton : MonoBehaviour
+namespace Game.Generics
 {
-    [SerializeField]
-    public Button.ButtonClickedEvent clickFirstEvent;
-
-    public void FirstButton_Click()
+    [ExecuteInEditMode]
+    public class InspectorButton : MonoBehaviour
     {
-        clickFirstEvent?.Invoke();
+        [SerializeField]
+        public Button.ButtonClickedEvent clickFirstEvent;
+
+        public void FirstButton_Click()
+        {
+            clickFirstEvent?.Invoke();
+        }
     }
-}
 
 #if UNITY_EDITOR
-[CustomEditor(typeof(InspectorButton))]
-public class InspectorButtonEditor : Editor
-{
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(InspectorButton))]
+    public class InspectorButtonEditor : Editor
     {
-        InspectorButton myScript = (InspectorButton)target;
-        string buttonName = (myScript.clickFirstEvent != null && myScript.clickFirstEvent.GetPersistentEventCount() > 0) ?
-            myScript.clickFirstEvent.GetPersistentMethodName(0) :
-            "not defined";
-        if (string.IsNullOrEmpty(buttonName)) buttonName = "not defined";
-        if (GUILayout.Button(buttonName))
+        public override void OnInspectorGUI()
         {
-            myScript.FirstButton_Click();
+            InspectorButton myScript = (InspectorButton)target;
+            string buttonName = (myScript.clickFirstEvent != null && myScript.clickFirstEvent.GetPersistentEventCount() > 0) ?
+                myScript.clickFirstEvent.GetPersistentMethodName(0) :
+                "not defined";
+            if (string.IsNullOrEmpty(buttonName)) buttonName = "not defined";
+            if (GUILayout.Button(buttonName))
+            {
+                myScript.FirstButton_Click();
+            }
+            DrawDefaultInspector();
         }
-        DrawDefaultInspector();
     }
-}
 #endif
+}

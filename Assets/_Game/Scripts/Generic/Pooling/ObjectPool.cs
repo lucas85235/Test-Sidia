@@ -1,38 +1,40 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour
+namespace Game.Generics
 {
-    public GameObject prefab;
-    public int amount = 5;
-
-    private List<GameObject> instances;
-    private int lastInstanceIndex = 0;
-
-    private void Awake()
+    public class ObjectPool : MonoBehaviour
     {
-        GameObject conteiner = new GameObject();
-        conteiner.name = "ObjectPool_" + prefab.name;
+        [SerializeField] private GameObject prefab;
+        [SerializeField] private int amount = 5;
 
-        instances = new List<GameObject>();
+        private List<GameObject> _instances;
+        private int _lastInstanceIndex = 0;
 
-        for (int i = 0; i < amount; i++)
+        private void Awake()
         {
-            var obj = Instantiate(prefab, conteiner.transform);
-            obj.SetActive(false);
-            instances.Add(obj);
+            GameObject conteiner = new GameObject();
+            conteiner.name = "ObjectPool_" + prefab.name;
+
+            _instances = new List<GameObject>();
+
+            for (int i = 0; i < amount; i++)
+            {
+                var obj = Instantiate(prefab, conteiner.transform);
+                obj.SetActive(false);
+                _instances.Add(obj);
+            }
         }
-    }
 
-    public GameObject GetInstance()
-    {
-        var instance = instances[lastInstanceIndex];
+        public GameObject GetInstance()
+        {
+            var instance = _instances[_lastInstanceIndex];
 
-        lastInstanceIndex++;
-        if (lastInstanceIndex >= instances.Count)
-            lastInstanceIndex = 0;
+            _lastInstanceIndex++;
+            if (_lastInstanceIndex >= _instances.Count)
+                _lastInstanceIndex = 0;
 
-        return instance;
-    }
+            return instance;
+        }
+    }    
 }

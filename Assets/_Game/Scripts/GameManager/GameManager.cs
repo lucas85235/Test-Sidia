@@ -1,3 +1,4 @@
+using Game.Generics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -5,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Grid))]
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private Spaw spaw = Spaw.Random;
     [SerializeField] private Player player;
@@ -97,17 +98,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static GameManager Instance;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     private void Start()
     {
         _collectablesContainer = new GameObject("Power Ups");
         _collectablesContainer.AddComponent<SinAnimation>();
+        _collectablesContainer.AddComponent<ParentObjectRotator>();
         _grid = GetComponent<Grid>();
         _grid.Create();
         _dice.OnRoll += OnRoll;
@@ -217,6 +212,19 @@ public class GameManager : MonoBehaviour
             FollowTargetCamera.Instance.SetTarget(_player1.transform);
             yield return new WaitUntil(() => Player1Moves > Player1TurnMoves);
 
+            turnCounter++;
+            HUDCanvas.Instance.UpdateTurn(turnCounter);
+
+            // Reset Control Variables
+            TurnAttacks = 1;
+
+            Player1ExtraTurnDices = 0;
+            Player2ExtraTurnDices = 0;
+            Player1Moves = 0;
+            Player2Moves = 0;
+            Player1TurnMoves = 2;
+            Player2TurnMoves = 2;
+
             // Init Player 2 Can Walk
             _currentTarget = Target.Player2;
             _player2.GetWalkableTiles();
@@ -224,8 +232,6 @@ public class GameManager : MonoBehaviour
             _player1.enabled = false;
             FollowTargetCamera.Instance.SetTarget(_player2.transform);
             yield return new WaitUntil(() => Player2Moves > Player2TurnMoves);
-
-
             _player2.enabled = false;
         }
     }
@@ -263,7 +269,7 @@ public class GameManager : MonoBehaviour
 
     private async Task<bool> StartBattleCheck(Player currentPlayer)
     {
-        var tiles = _grid.GetOrthogonallyNeighboringTiles(currentPlayer.Tile);
+        var tiles = _grid.GetNeighboringTiles(currentPlayer.Tile);
         var foundPlayer = tiles.Find(item =>
             item.occupant != null &&
             item.occupant.CompareTag("Player") &&
@@ -282,19 +288,21 @@ public class GameManager : MonoBehaviour
         player2Dices = new List<int>();
         _player1TurnDices = Player1ExtraTurnDices + 3;
         _player2TurnDices = Player2ExtraTurnDices + 3;
-        _dice.AtiveRoolButton(true);
 
         HUDCanvas.Instance.AlertText("Roll the dice player 1");
         _currentTargetInBattle = Target.Player1;
+        _dice.CurrentPlayer = _currentTargetInBattle;
+        _dice.ActiveRoolButton(true);
         while (_player1TurnDices > player1Dices.Count)
             await Task.Delay(500);
 
         HUDCanvas.Instance.AlertText("Roll the dice player 2");
         _currentTargetInBattle = Target.Player2;
+        _dice.CurrentPlayer = _currentTargetInBattle;
+        _dice.ActiveRoolButton(true);
         while (_player2TurnDices > player2Dices.Count)
             await Task.Delay(500);
 
-        _dice.AtiveRoolButton(false);
 
         player1Dices.Sort((a, b) => b.CompareTo(a));
         player2Dices.Sort((a, b) => b.CompareTo(a));
@@ -329,6 +337,7 @@ public class GameManager : MonoBehaviour
             HUDCanvas.Instance.AlertText($"Player 2 won the battle");
         }
 
+        await Task.Delay(2000);
         if (_player1.CurrentHealth < 1 || _player2.CurrentHealth < 1)
         {
             StopCoroutine(TurnControl());
@@ -364,7 +373,11 @@ public class GameManager : MonoBehaviour
         }
 
         GameAssets.CreateRollText(spawPoint.position + Vector3.up, rollValue);
-        _dice.AtiveRoolButton(true);
+
+        if (_currentTargetInBattle == Target.Player1)
+            _dice.ActiveRoolButton(_player1TurnDices > player1Dices.Count);
+        else _dice.ActiveRoolButton(_player2TurnDices > player2Dices.Count);
+
     }
 
     #region Collectables Actions
@@ -407,10 +420,10 @@ public class GameManager : MonoBehaviour
         switch (playerTarget)
         {
             case Target.Player1:
-                _player1.TakeDamage(-Random.Range(1, 3));
+                _player1.TakeDamage(-Random.Range(2, 5));
                 break;
             case Target.Player2:
-                _player2.TakeDamage(-Random.Range(1, 3));
+                _player2.TakeDamage(-Random.Range(2, 5));
                 break;
         }
         AudioManager.Instance.PlaySoundEffect(3);

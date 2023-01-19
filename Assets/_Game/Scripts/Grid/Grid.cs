@@ -1,13 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
     [Header("Grid Size")]
-    [SerializeField][Min(2)] private int rows = 16;
-    [SerializeField][Min(2)] private int columns = 16;
+    [SerializeField][Min(3)] private int rows = 16;
+    [SerializeField][Min(3)] private int columns = 16;
 
     [Header("Settings")]
     [SerializeField] private Tile tile;
@@ -98,6 +96,7 @@ public class Grid : MonoBehaviour
         var tileRow = tile.row;
         var tileColumn = tile.column;
 
+        // Check if the orthogonally neighboring tiles exist in the grid
         if (tileRow > 0)
             neighboringTiles.Add(Tiles[tileRow - 1][tileColumn]);
         if (tileRow < rows - 1)
@@ -109,5 +108,53 @@ public class Grid : MonoBehaviour
             neighboringTiles.Add(Tiles[tileRow][tileColumn + 1]);
 
         return neighboringTiles;
+    }
+
+    public Tile GetTopNeighboringTile(Tile tile)
+    {
+        // Get the coordinates of the tile
+        var tileRow = tile.row;
+        var tileColumn = tile.column;
+
+        if (tileRow < rows - 1)
+            return Tiles[tileRow + 1][tileColumn];
+
+        return null;
+    }
+
+    public Tile GetBottonNeighboringTile(Tile tile)
+    {
+        // Get the coordinates of the tile
+        var tileRow = tile.row;
+        var tileColumn = tile.column;
+
+        if (tileRow > 0)
+            return Tiles[tileRow - 1][tileColumn];
+
+        return null;
+    }
+
+    public Tile GetLeftNeighboringTile(Tile tile)
+    {
+        // Get the coordinates of the tile
+        var tileRow = tile.row;
+        var tileColumn = tile.column;
+
+        if (tileColumn > 0)
+            return Tiles[tileRow][tileColumn - 1];
+
+        return null;
+    }
+
+    public Tile GetRightNeighboringTile(Tile tile)
+    {
+        // Get the coordinates of the tile
+        var tileRow = tile.row;
+        var tileColumn = tile.column;
+
+        if (tileColumn < columns - 1)
+            return Tiles[tileRow][tileColumn + 1];
+
+        return null;
     }
 }

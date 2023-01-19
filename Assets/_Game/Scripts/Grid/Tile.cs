@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -7,7 +5,11 @@ public class Tile : MonoBehaviour
     public int row;
     public int column;
     public GameObject occupant;
-    public Color highlightColor = Color.red;
+
+    [SerializeField]
+    private Color highlightColor = Color.red;
+
+    public Tile Previous { get; set; }
 
     private bool _isSelectable = false;
     private Renderer _render;

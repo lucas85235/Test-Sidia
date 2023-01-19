@@ -1,9 +1,9 @@
-using System.Collections;
+using Game.Generics;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singleton<AudioManager>
 {
     [SerializeField] private List<AudioClip> musicTracks;
     [SerializeField] private List<AudioClip> soundEffects;
@@ -19,11 +19,9 @@ public class AudioManager : MonoBehaviour
     private const string MUSIC_VOLUME_KEY = "music_volume";
     private const string SOUND_EFFECT_VOLUME_KEY = "sound_effect_volume";
 
-    public static AudioManager Instance;
-
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
         LoadSoundSettings();
     }
 
@@ -31,7 +29,6 @@ public class AudioManager : MonoBehaviour
     {
         musicSource.volume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, defaultMusicVolume);
         soundEffectSource.volume = PlayerPrefs.GetFloat(SOUND_EFFECT_VOLUME_KEY, defaultSoundEffectVolume);
-
         if (musicSlider != null) musicSlider.value = musicSource.volume;
         if (soundEffectsSlider != null) soundEffectsSlider.value = soundEffectSource.volume;
     }
