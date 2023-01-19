@@ -11,14 +11,13 @@ public class Collectable : MonoBehaviour
     {
         if (randomCollectable)
         {
-            collectable = (CollectablesTypes) Random.Range(0, Enum.GetValues(typeof(CollectablesTypes)).Length);
+            collectable = (CollectablesTypes)Random.Range(0, Enum.GetValues(typeof(CollectablesTypes)).Length);
         }
     }
 
     public void OnPick(Target player)
     {
-        Debug.Log($"Collected for {player} gain {collectable}");
-
+        // Debug.Log($"Collected for {player} gain {collectable}");
         switch (collectable)
         {
             case CollectablesTypes.ExtraMove:

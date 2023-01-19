@@ -10,11 +10,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private Collectable[] collectables;
 
-    [Header("View Only")]
-    [SerializeField] private Player player1;
-    [SerializeField] private Player player2;
-
     private Grid _grid;
+    private Player _player1;
+    private Player _player2;
     private GameObject _collectablesContainer;
     private List<Collectable> spawnedCollectables = new List<Collectable>();
     private int collectablesAmount;
@@ -38,23 +36,24 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _collectablesContainer = new GameObject("Power Ups");
+        _collectablesContainer.AddComponent<SinAnimation>();
         _grid = GetComponent<Grid>();
         _grid.Create();
 
         var spawPointPlayer1 = _grid.Tiles.FirstOrDefault()[Mathf.CeilToInt(_grid.Columns / 2)];
         var spawPointPlayer2 = _grid.Tiles[_grid.Rows - 1][Mathf.CeilToInt(_grid.Columns / 2)];
 
-        player1 = Instantiate(player, spawPointPlayer1.transform.position + (Vector3.up * 1.25f), Quaternion.identity) as Player;
-        player1.name = "Player 1";
-        player1.targer = Target.Player1;
-        player1.Init(_grid, spawPointPlayer1);
-        player1.OnWalk += CountPlayer1Moves;
+        _player1 = Instantiate(player, spawPointPlayer1.transform.position + (Vector3.up * 1.25f), Quaternion.identity) as Player;
+        _player1.name = "Player 1";
+        _player1.targer = Target.Player1;
+        _player1.Init(_grid, spawPointPlayer1);
+        _player1.OnWalk += CountPlayer1Moves;
 
-        player2 = Instantiate(player, spawPointPlayer2.transform.position + (Vector3.up * 1.25f), Quaternion.identity) as Player;
-        player2.name = "Player 2";
-        player2.targer = Target.Player2;
-        player2.Init(_grid, spawPointPlayer2);
-        player2.OnWalk += CountPlayer2Moves;
+        _player2 = Instantiate(player, spawPointPlayer2.transform.position + (Vector3.up * 1.25f), Quaternion.identity) as Player;
+        _player2.name = "Player 2";
+        _player2.targer = Target.Player2;
+        _player2.Init(_grid, spawPointPlayer2);
+        _player2.OnWalk += CountPlayer2Moves;
 
         // Spaw Items
         SpawCollectables();
@@ -97,18 +96,20 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        while (player1.CurrentHealth > 0 && player2.CurrentHealth > 0)
+        while (_player1.CurrentHealth > 0 && _player2.CurrentHealth > 0)
         {
             // Init Player 1 Can Walk
-            player1.GetWalkableTiles();
-            player1.enabled = true;
-            player2.enabled = false;
+            _player1.GetWalkableTiles();
+            _player1.enabled = true;
+            _player2.enabled = false;
+            FollowTargetCamera.Instance.SetTarget(_player1.transform);
             yield return new WaitUntil(() => player1Moves > player1TurnMoves);
 
             // Init Player 2 Can Walk
-            player2.GetWalkableTiles();
-            player2.enabled = true;
-            player1.enabled = false;
+            _player2.GetWalkableTiles();
+            _player2.enabled = true;
+            _player1.enabled = false;
+            FollowTargetCamera.Instance.SetTarget(_player2.transform);
             yield return new WaitUntil(() => player2Moves > player2TurnMoves);
 
             // Reset Counters
@@ -119,9 +120,7 @@ public class GameManager : MonoBehaviour
             player1ExtraTurnDices = 0;
             player2ExtraTurnDices = 0;
             turnAttacks = 1;
-            player2.enabled = false;
-
-            // esperar até o fim da batalha caso estaja ocorrendo
+            _player2.enabled = false;
         }
     }
 
@@ -130,28 +129,28 @@ public class GameManager : MonoBehaviour
     {
         if (turnAttacks > 0)
         {
-            var canContinue = await StartBattleCheck(player1);
+            var canContinue = await StartBattleCheck(_player1);
             if (!canContinue) return;
         }
 
         player1Moves++;
         if (player1Moves <= player1TurnMoves)
         {
-            player1.GetWalkableTiles();
+            _player1.GetWalkableTiles();
         }
     }
     private async void CountPlayer2Moves()
     {
         if (turnAttacks > 0)
         {
-            var canContinue = await StartBattleCheck(player2);
+            var canContinue = await StartBattleCheck(_player2);
             if (!canContinue) return;
         }
 
         player2Moves++;
         if (player2Moves <= player2TurnMoves)
         {
-            player2.GetWalkableTiles();
+            _player2.GetWalkableTiles();
         }
     }
     #endregion
@@ -195,7 +194,7 @@ public class GameManager : MonoBehaviour
         {
             if (player1Dices[i] == player2Dices[i])
             {
-                if (player1.enabled == true)
+                if (_player1.enabled == true)
                     player1Wins++;
                 else player2Wins++;
             }
@@ -211,20 +210,20 @@ public class GameManager : MonoBehaviour
 
         if (player1Wins > player2Wins)
         {
-            player2.TakeDamage(player1.CurrentAttack);
+            _player2.TakeDamage(_player1.CurrentAttack);
             Debug.Log($"Player 1 Win Battle {player1Wins}x{player2Wins}");
         }
         else
         {
-            player1.TakeDamage(player2.CurrentAttack);
+            _player1.TakeDamage(_player2.CurrentAttack);
             Debug.Log($"Player 2 Win Battle {player1Wins}x{player2Wins}");
         }
 
-        if (player1.CurrentHealth < 1 || player2.CurrentHealth < 1)
+        if (_player1.CurrentHealth < 1 || _player2.CurrentHealth < 1)
         {
             StopCoroutine(TurnControl());
 
-            if (player1.CurrentHealth > 0)
+            if (_player1.CurrentHealth > 0)
                 HUDCanvas.Instance.OpenGameOverPopup("Player 1 Win");
             else HUDCanvas.Instance.OpenGameOverPopup("Player 2 Win");
 
@@ -271,10 +270,10 @@ public class GameManager : MonoBehaviour
         switch (playerTarget)
         {
             case Target.Player1:
-                player1.TakeDamage(-Random.Range(1, 3));
+                _player1.TakeDamage(-Random.Range(1, 3));
                 break;
             case Target.Player2:
-                player2.TakeDamage(-Random.Range(1, 3));
+                _player2.TakeDamage(-Random.Range(1, 3));
                 break;
         }
     }

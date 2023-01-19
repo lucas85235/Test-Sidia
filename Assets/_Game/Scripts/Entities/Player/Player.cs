@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private PlayerData data;
+    [SerializeField] private float smoothSpeed = 5f;
 
     private Grid _grid;
     private Tile _tile;
@@ -58,6 +59,9 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
+
+        if (CurrentAttack > data.Health)
+            CurrentHealth = data.Health;
     }
 
     public void GetWalkableTiles()
@@ -82,10 +86,24 @@ public class Player : MonoBehaviour
             collectable.OnPick(targer);
             GameManager.Instance.SpawCollectablesCheck();
         }
-        
+
         _tile = tile;
         _tile.occupant = gameObject;
-        transform.position = _tile.transform.position + (Vector3.up * 1.25f);
+        StartCoroutine(SmoothMovement(tile.transform.position + (Vector3.up * 1.25f)));
+    }
+
+    private IEnumerator SmoothMovement(Vector3 end)
+    {
+        float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+
+        while (sqrRemainingDistance > 0.001f)
+        {
+            Vector3 newPosition = Vector3.Lerp(transform.position, end, smoothSpeed * Time.deltaTime);
+            transform.position = newPosition;
+            sqrRemainingDistance = (transform.position - end).sqrMagnitude;
+            yield return new WaitForEndOfFrame();
+        }
+
         OnWalk?.Invoke();
     }
 }

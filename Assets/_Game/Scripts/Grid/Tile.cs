@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour
         else _render.material.color = Color.green;
     }
 
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
         if (_isSelectable)
         {

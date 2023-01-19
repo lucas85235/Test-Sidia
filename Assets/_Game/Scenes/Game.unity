@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 681187594}
   - component: {fileID: 681187593}
   - component: {fileID: 681187592}
+  - component: {fileID: 681187595}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -517,12 +518,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681187591}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2, y: 8, z: 2.5}
+  m_LocalPosition: {x: 0, y: 10, z: 7.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &681187595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681187591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10cbf52f93450f34782452f98c5f5cb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  offset: {x: 0, y: 15, z: 0}
+  followSpeed: 5
 --- !u!1 &761942796
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,8 +570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dffc9f0135e4757468c69d7c4d3fc253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 7
-  columns: 5
+  rows: 16
+  columns: 16
   tile: {fileID: 600565972078287491, guid: 2a07245ee3132104b94295c743ece01f, type: 3}
   tileMaterial1: {fileID: 2100000, guid: 3850029554b48c942a5c1392cd9e1dab, type: 2}
   tileMaterial2: {fileID: 2100000, guid: b213e24e6837f0f45a1c2ce9e918244f, type: 2}
