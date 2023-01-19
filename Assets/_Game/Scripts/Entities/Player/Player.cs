@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -14,6 +13,7 @@ public class Player : MonoBehaviour
 
     public Action OnWalk;
     public Tile Tile { get => _tile; }
+    public Target targer { get; set; }
     public int CurrentHealth { get; private set; }
     public int CurrentAttack { get; private set; }
 
@@ -76,6 +76,13 @@ public class Player : MonoBehaviour
         if (_tile != null)
             _tile.occupant = null;
 
+        // Check if have collectable
+        if (tile.occupant != null && tile.occupant.TryGetComponent(out Collectable collectable))
+        {
+            collectable.OnPick(targer);
+            GameManager.Instance.SpawCollectablesCheck();
+        }
+        
         _tile = tile;
         _tile.occupant = gameObject;
         transform.position = _tile.transform.position + (Vector3.up * 1.25f);
