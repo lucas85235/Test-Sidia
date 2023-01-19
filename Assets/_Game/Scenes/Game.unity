@@ -2043,7 +2043,7 @@ Transform:
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &617737340
 MonoBehaviour:
@@ -2470,8 +2470,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dffc9f0135e4757468c69d7c4d3fc253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 6
-  columns: 6
+  rows: 16
+  columns: 16
   tile: {fileID: 600565972078287491, guid: 2a07245ee3132104b94295c743ece01f, type: 3}
   tileMaterial1: {fileID: 2100000, guid: 3850029554b48c942a5c1392cd9e1dab, type: 2}
   tileMaterial2: {fileID: 2100000, guid: b213e24e6837f0f45a1c2ce9e918244f, type: 2}
@@ -2501,6 +2501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cabf3fa19ca367d4bb9f9c87d3c466fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spaw: 1
   player: {fileID: 4409965721854689498, guid: 847557957c0cc7141a775890301d13ba, type: 3}
   _dice: {fileID: 617737334}
   _colorSelector: {fileID: 823309660}
@@ -2870,7 +2871,51 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &955785546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 955785548}
+  - component: {fileID: 955785547}
+  m_Layer: 0
+  m_Name: PlayMusic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &955785547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955785546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4254ac1493f600f49b57536f36781990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clipIndex: 0
+--- !u!4 &955785548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955785546}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &959191311
 GameObject:
@@ -3019,7 +3064,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6154815333626380452, guid: 813885493279b2c4c8d8fd30de8f9dd1, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6154815333626380452, guid: 813885493279b2c4c8d8fd30de8f9dd1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3613,7 +3658,7 @@ Transform:
   - {fileID: 205008090}
   - {fileID: 433174329}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1123743443
 GameObject:
@@ -4085,7 +4130,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3089259204885843824, guid: 2fdd532d11d9e1c45a48ec8a92d35969, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3089259204885843824, guid: 2fdd532d11d9e1c45a48ec8a92d35969, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6416,3 +6461,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145843633}
   m_CullTransparentMesh: 1
+--- !u!1001 &1059279214487471887
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225835, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1059279213607225839, guid: 7571bdfd810264d45a464943d3836427, type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7571bdfd810264d45a464943d3836427, type: 3}

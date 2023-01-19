@@ -87,9 +87,12 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (CurrentHealth - damage > CurrentHealth)
-            GameAssets.CreateHealthText(transform.position + Vector3.up, damage * -1);
-        else GameAssets.CreateDamageText(transform.position + Vector3.up, damage * -1);
+        if (CurrentHealth - damage < CurrentHealth)
+        {
+            AudioManager.Instance.PlaySoundEffect(2);
+            GameAssets.CreateDamageText(transform.position + Vector3.up, damage * -1);
+        }
+        else GameAssets.CreateHealthText(transform.position + Vector3.up, damage * -1);
 
         CurrentHealth -= damage;
     }
@@ -125,6 +128,7 @@ public class Player : MonoBehaviour
         _tile = tile;
         _tile.occupant = gameObject;
         StartCoroutine(SmoothMovement(tile.transform.position + (Vector3.up * 1.25f)));
+        AudioManager.Instance.PlaySoundEffect(0);
     }
 
     private IEnumerator SmoothMovement(Vector3 end)

@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Grid))]
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Spaw spaw = Spaw.Random;
     [SerializeField] private Player player;
     [SerializeField] private DiceRoll _dice;
     [SerializeField] private PlayerColorSelector _colorSelector;
@@ -111,8 +112,18 @@ public class GameManager : MonoBehaviour
         _grid.Create();
         _dice.OnRoll += OnRoll;
 
-        var spawPointPlayer1 = _grid.Tiles.FirstOrDefault()[Mathf.CeilToInt(_grid.Columns / 2)];
-        var spawPointPlayer2 = _grid.Tiles[_grid.Rows - 1][Mathf.CeilToInt(_grid.Columns / 2)];
+        Tile spawPointPlayer1 = null, spawPointPlayer2 = null;
+        if (spaw == Spaw.Fixed)
+        {
+            spawPointPlayer1 = _grid.Tiles.FirstOrDefault()[Mathf.CeilToInt(_grid.Columns / 2)];
+            spawPointPlayer2 = _grid.Tiles[_grid.Rows - 1][Mathf.CeilToInt(_grid.Columns / 2)];
+        }
+        else
+        {
+            spawPointPlayer1 = _grid.Tiles[Random.Range(0, _grid.Rows)][Random.Range(0, _grid.Columns)];
+            while (spawPointPlayer2 == null || spawPointPlayer2.transform == spawPointPlayer1.transform)
+                spawPointPlayer2 = _grid.Tiles[Random.Range(0, _grid.Rows)][Random.Range(0, _grid.Columns)];
+        }
 
         _player1 = Instantiate(player, spawPointPlayer1.transform.position + (Vector3.up * 1.25f), Quaternion.identity) as Player;
         _player1.name = "Player 1";
@@ -360,6 +371,7 @@ public class GameManager : MonoBehaviour
     public void GainExtraTurnAttack()
     {
         TurnAttacks++;
+        AudioManager.Instance.PlaySoundEffect(6);
     }
 
     public void GainExtraTurnMove(Target playerTarget)
@@ -373,6 +385,7 @@ public class GameManager : MonoBehaviour
                 Player2TurnMoves++;
                 break;
         }
+        AudioManager.Instance.PlaySoundEffect(5);
     }
 
     public void GainExtraTurnDice(Target playerTarget)
@@ -386,6 +399,7 @@ public class GameManager : MonoBehaviour
                 Player2ExtraTurnDices++;
                 break;
         }
+        AudioManager.Instance.PlaySoundEffect(4);
     }
 
     public void RestoreSomeHealth(Target playerTarget)
@@ -399,6 +413,7 @@ public class GameManager : MonoBehaviour
                 _player2.TakeDamage(-Random.Range(1, 3));
                 break;
         }
+        AudioManager.Instance.PlaySoundEffect(3);
     }
     #endregion
 }
@@ -407,4 +422,10 @@ public enum Target
 {
     Player1,
     Player2,
+}
+
+public enum Spaw
+{
+    Fixed,
+    Random,
 }
