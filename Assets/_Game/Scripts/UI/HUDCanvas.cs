@@ -16,10 +16,11 @@ public class HUDCanvas : MonoBehaviour
     [SerializeField] private Button restartButton;
     [SerializeField] private Button menuButton;
     [SerializeField] private TextMeshProUGUI winnerText;
-    [SerializeField] private GameObject gameOverPopup;
+    [SerializeField] private Popup gameOverPopup;
 
     [Header("Other")]
     [SerializeField] private FloatingTextRect alertText;
+    [SerializeField] private Popup pausePopup;
 
     public PlayerHUD Player1 { get => player1; }
     public PlayerHUD Player2 { get => player2; }
@@ -36,15 +37,15 @@ public class HUDCanvas : MonoBehaviour
     public void OpenGameOverPopup(string winnerMsg)
     {
         winnerText.text = winnerMsg;
-        gameOverPopup.SetActive(true);
+        gameOverPopup.Open();
     }
 
-    private void RestartButton()
+    public void RestartButton()
     {
         SceneLoader.LoadScene("Game");
     }
 
-    private void MenuButton()
+    public void MenuButton()
     {
         SceneLoader.LoadScene("MainMenu");
     }
@@ -62,6 +63,11 @@ public class HUDCanvas : MonoBehaviour
     public void AlertText(string message)
     {
         alertText.Init(message);
+    }
+
+    public void PauseMenu()
+    {
+        pausePopup.Open();
     }
 
     [System.Serializable]

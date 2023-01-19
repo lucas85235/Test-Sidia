@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Player player;
     [SerializeField] private DiceRoll _dice;
+    [SerializeField] private PlayerColorSelector _colorSelector;
     [SerializeField] private Collectable[] collectables;
 
     private Grid _grid;
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     private List<Collectable> spawnedCollectables = new List<Collectable>();
     private int collectablesAmount;
     private int turnCounter;
+    private bool isPaused = false;
 
     // Turn control variables
     private int player1Moves = 0;
@@ -116,17 +118,33 @@ public class GameManager : MonoBehaviour
         _player1.name = "Player 1";
         _player1.targer = Target.Player1;
         _player1.Init(_grid, spawPointPlayer1);
+        _player1.Renderer.material.color = _colorSelector.GetCurrentColor();
         _player1.OnWalk += CountPlayer1Moves;
 
         _player2 = Instantiate(player, spawPointPlayer2.transform.position + (Vector3.up * 1.25f), Quaternion.identity) as Player;
         _player2.name = "Player 2";
         _player2.targer = Target.Player2;
         _player2.Init(_grid, spawPointPlayer2);
+        _player2.Renderer.material.color = _colorSelector.GetAnalogColor();
         _player2.OnWalk += CountPlayer2Moves;
 
         // Spaw Items
         SpawCollectables();
         StartCoroutine(TurnControl());
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HUDCanvas.Instance.PauseMenu();
+            Pause();
+        }
+    }
+
+    public void Pause()
+    {
+        isPaused = !isPaused;
     }
 
     public void SpawCollectablesCheck()

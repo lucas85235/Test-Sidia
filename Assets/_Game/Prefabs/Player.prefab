@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0005b335f180746a64690c714cd810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mesh: {fileID: 4409965723879503598}
   data: {fileID: 11400000, guid: 1a39e4d2d0f08d24e8771f2ba4c4eb8e, type: 2}
   smoothSpeed: 5
 --- !u!114 &6209407504926098241

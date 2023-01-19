@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PunchAnimation))]
 public class Player : MonoBehaviour
 {
+    [SerializeField] private Renderer mesh;
     [SerializeField] private PlayerData data;
     [SerializeField] private float smoothSpeed = 5f;
 
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     public Action OnWalk;
     public Tile Tile { get => _tile; }
     public Target targer { get; set; }
+    public Renderer Renderer { get => mesh; }
 
     private int _currentHealth;
     public int CurrentHealth

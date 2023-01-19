@@ -32,7 +32,7 @@ public class DiceRoll : MonoBehaviour
         button.interactable = false;
 
         Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-        var randomForce = randomDirection * Random.Range(200, 600);
+        var randomForce = randomDirection * Random.Range(300, 600);
 
         rb.AddForce(randomForce);
         rb.AddTorque(randomForce);
@@ -41,7 +41,12 @@ public class DiceRoll : MonoBehaviour
 
     private void GetRollValue()
     {
-        rollValue = (int)transform.eulerAngles.x % sides + 1;
+        Vector3 euler = transform.eulerAngles;
+        euler.x = Mathf.Round(euler.x / 90) * 90;
+        euler.y = Mathf.Round(euler.y / 90) * 90;
+        euler.z = Mathf.Round(euler.z / 90) * 90;
+
+        rollValue = (int)(euler.y / 90) + 1;
         OnRoll?.Invoke(rollValue);
     }
 }

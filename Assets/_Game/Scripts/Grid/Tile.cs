@@ -12,6 +12,7 @@ public class Tile : MonoBehaviour
     private bool _isSelectable = false;
     private Renderer _render;
     private Color _defaultColor;
+    private Color _selectableColor;
 
     public bool IsSelectad { get; private set; } = false;
 
@@ -19,6 +20,9 @@ public class Tile : MonoBehaviour
     {
         _render = GetComponent<Renderer>();
         _defaultColor = _render.material.color;
+        var color = Color.green;
+        color.a = 0.8f;
+        _selectableColor = color;
     }
 
     public void SelectableMode(bool state)
@@ -30,7 +34,7 @@ public class Tile : MonoBehaviour
             _render.material.color = _defaultColor;
             IsSelectad = false;
         }
-        else _render.material.color = Color.green;
+        else _render.material.color = _selectableColor;
     }
 
     private void OnMouseOver()
@@ -46,7 +50,7 @@ public class Tile : MonoBehaviour
     {
         if (_isSelectable)
         {
-            _render.material.color = Color.green;
+            _render.material.color = _selectableColor;
             IsSelectad = false;
         }
     }
