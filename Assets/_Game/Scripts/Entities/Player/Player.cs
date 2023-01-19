@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PunchAnimation))]
 public class Player : MonoBehaviour
 {
     [SerializeField] private PlayerData data;
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour
 
     private Grid _grid;
     private Tile _tile;
+    private PunchAnimation _punch;
     private List<Tile> _currentWalkableTiles = new List<Tile>();
 
     public Action OnWalk;
@@ -38,6 +40,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        _punch = GetComponent<PunchAnimation>();
         CurrentHealth = data.Health;
         CurrentAttack = data.Attack;
     }
@@ -81,6 +84,11 @@ public class Player : MonoBehaviour
             CurrentHealth = data.Health;
             return;
         }
+
+        if (CurrentHealth - damage > CurrentHealth)
+            GameAssets.CreateHealthText(transform.position + Vector3.up, damage * -1);
+        else GameAssets.CreateDamageText(transform.position + Vector3.up, damage * -1);
+
         CurrentHealth -= damage;
     }
 
@@ -93,6 +101,11 @@ public class Player : MonoBehaviour
         {
             item.SelectableMode(true);
         }
+    }
+
+    public void PunchAnimation(Transform target)
+    {
+        _punch.Punch(target);
     }
 
     private void WalkTo(Tile tile)

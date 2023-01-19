@@ -8,11 +8,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Player player;
+    [SerializeField] private DiceRoll _dice;
     [SerializeField] private Collectable[] collectables;
 
     private Grid _grid;
     private Player _player1;
     private Player _player2;
+    private Target _currentTarget;
     private GameObject _collectablesContainer;
     private List<Collectable> spawnedCollectables = new List<Collectable>();
     private int collectablesAmount;
@@ -105,6 +107,7 @@ public class GameManager : MonoBehaviour
         _collectablesContainer.AddComponent<SinAnimation>();
         _grid = GetComponent<Grid>();
         _grid.Create();
+        _dice.OnRoll += OnRoll;
 
         var spawPointPlayer1 = _grid.Tiles.FirstOrDefault()[Mathf.CeilToInt(_grid.Columns / 2)];
         var spawPointPlayer2 = _grid.Tiles[_grid.Rows - 1][Mathf.CeilToInt(_grid.Columns / 2)];
@@ -178,6 +181,7 @@ public class GameManager : MonoBehaviour
             Player2TurnMoves = 2;
 
             // Init Player 1 Can Walk
+            _currentTarget = Target.Player1;
             _player1.GetWalkableTiles();
             _player1.enabled = true;
             _player2.enabled = false;
@@ -185,6 +189,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitUntil(() => Player1Moves > Player1TurnMoves);
 
             // Init Player 2 Can Walk
+            _currentTarget = Target.Player2;
             _player2.GetWalkableTiles();
             _player2.enabled = true;
             _player1.enabled = false;
@@ -244,19 +249,23 @@ public class GameManager : MonoBehaviour
     {
         TurnAttacks--;
 
-        var player1Dices = new List<int>();
-        var player2Dices = new List<int>();
+        player1Dices = new List<int>();
+        player2Dices = new List<int>();
+        _player1TurnDices = Player1ExtraTurnDices + 3;
+        _player2TurnDices = Player2ExtraTurnDices + 3;
+        _dice.AtiveRoolButton(true);
 
-        for (int i = 0; i < 3; i++)
-        {
-            player1Dices.Add(Random.Range(1, 7));
-            player2Dices.Add(Random.Range(1, 7));
-        }
+        HUDCanvas.Instance.AlertText("Roll the dice player 1");
+        _currentTargetInBattle = Target.Player1;
+        while (_player1TurnDices > player1Dices.Count)
+            await Task.Delay(500);
 
-        for (int i = 0; i < Player1ExtraTurnDices; i++)
-            player1Dices.Add(Random.Range(1, 7));
-        for (int i = 0; i < Player2ExtraTurnDices; i++)
-            player2Dices.Add(Random.Range(1, 7));
+        HUDCanvas.Instance.AlertText("Roll the dice player 2");
+        _currentTargetInBattle = Target.Player2;
+        while (_player2TurnDices > player2Dices.Count)
+            await Task.Delay(500);
+
+        _dice.AtiveRoolButton(false);
 
         player1Dices.Sort((a, b) => b.CompareTo(a));
         player2Dices.Sort((a, b) => b.CompareTo(a));
@@ -277,18 +286,18 @@ public class GameManager : MonoBehaviour
             else player2Wins++;
         }
 
-        Debug.Log($"Battle in progress");
         await Task.Delay(1000);
-
         if (player1Wins > player2Wins)
         {
             _player2.TakeDamage(_player1.CurrentAttack);
-            Debug.Log($"Player 1 Win Battle {player1Wins}x{player2Wins}");
+            _player1.PunchAnimation(_player2.transform);
+            HUDCanvas.Instance.AlertText($"Player 1 won the battle");
         }
         else
         {
             _player1.TakeDamage(_player2.CurrentAttack);
-            Debug.Log($"Player 2 Win Battle {player1Wins}x{player2Wins}");
+            _player2.PunchAnimation(_player1.transform);
+            HUDCanvas.Instance.AlertText($"Player 2 won the battle");
         }
 
         if (_player1.CurrentHealth < 1 || _player2.CurrentHealth < 1)
@@ -302,7 +311,31 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
+        await Task.Delay(1000);
         return true;
+    }
+
+    private Target _currentTargetInBattle;
+    private List<int> player1Dices;
+    private List<int> player2Dices;
+    private int _player1TurnDices;
+    private int _player2TurnDices;
+    private void OnRoll(int rollValue)
+    {
+        Transform spawPoint;
+        if (_currentTargetInBattle == Target.Player1)
+        {
+            player1Dices.Add(rollValue);
+            spawPoint = _player1.transform;
+        }
+        else
+        {
+            player2Dices.Add(rollValue);
+            spawPoint = _player2.transform;
+        }
+
+        GameAssets.CreateRollText(spawPoint.position + Vector3.up, rollValue);
+        _dice.AtiveRoolButton(true);
     }
 
     #region Collectables Actions

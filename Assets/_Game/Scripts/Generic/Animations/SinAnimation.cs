@@ -5,7 +5,7 @@ using UnityEngine;
 public class SinAnimation : MonoBehaviour
 {
     [Header("Move")]
-    [SerializeField] private float distance = 0.2f;
+    [SerializeField] private float distance = 0.1f;
     [SerializeField] private float speed = 2f;
 
     private void FixedUpdate()

@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4409965721854689499}
   - component: {fileID: 4409965721854689498}
+  - component: {fileID: 6209407504926098241}
+  - component: {fileID: -7852743155555219973}
+  - component: {fileID: -4821399488240735479}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -46,6 +49,75 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 1a39e4d2d0f08d24e8771f2ba4c4eb8e, type: 2}
   smoothSpeed: 5
+--- !u!114 &6209407504926098241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409965721854689501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2377c223425bf194987a586613c50e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 4
+  shakeAmount: 0.5
+  shakeDuration: 0.15
+--- !u!114 &-7852743155555219973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409965721854689501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47df8cb69919d04b8a62b5ed0550e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickFirstEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4409965721854689498}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: TakeDamage
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &-4821399488240735479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409965721854689501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47df8cb69919d04b8a62b5ed0550e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickFirstEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6209407504926098241}
+        m_TargetAssemblyTypeName: PunchAnimation, Assembly-CSharp
+        m_MethodName: Punch
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4409965723879503603
 GameObject:
   m_ObjectHideFlags: 0

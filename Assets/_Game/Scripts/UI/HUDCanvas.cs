@@ -18,6 +18,9 @@ public class HUDCanvas : MonoBehaviour
     [SerializeField] private TextMeshProUGUI winnerText;
     [SerializeField] private GameObject gameOverPopup;
 
+    [Header("Other")]
+    [SerializeField] private FloatingTextRect alertText;
+
     public PlayerHUD Player1 { get => player1; }
     public PlayerHUD Player2 { get => player2; }
 
@@ -54,6 +57,11 @@ public class HUDCanvas : MonoBehaviour
     public void UpdateTurnAttacks(int turnAttacks)
     {
         turnAttacksText.text = $"Attacks in turn: {turnAttacks}";
+    }
+
+    public void AlertText(string message)
+    {
+        alertText.Init(message);
     }
 
     [System.Serializable]
