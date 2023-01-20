@@ -26,6 +26,7 @@ namespace Game.Generics
 
             playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
             SaveSelectedColorIndex();
+            AudioManager.Instance.PlaySoundEffect(11);
         }
         public void PreviousColor()
         {
@@ -35,6 +36,7 @@ namespace Game.Generics
 
             playerRenderer.material.color = !useSecondaryColor ? GetCurrentColor() : GetAnalogColor();
             SaveSelectedColorIndex();
+            AudioManager.Instance.PlaySoundEffect(11);
         }
 
         public Color GetCurrentColor()

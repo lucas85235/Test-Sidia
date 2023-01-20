@@ -48,6 +48,7 @@ MonoBehaviour:
   musicTracks:
   - {fileID: 8300000, guid: 14a1cf915de1c2448b200ab123c01445, type: 3}
   - {fileID: 8300000, guid: d9e280ca0b9d3ad4f83da6d4defd2c91, type: 3}
+  - {fileID: 8300000, guid: 5b59cce20f4d42a48b3069957f936fe4, type: 3}
   soundEffects:
   - {fileID: 8300000, guid: b35a8d5eef240f644b86b09d172af202, type: 3}
   - {fileID: 8300000, guid: 651b33ffeb76c1940a0f8a4a4f60aa94, type: 3}
@@ -56,6 +57,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 523567ab715769145a6cb88e95dc28d2, type: 3}
   - {fileID: 8300000, guid: 398ac8c4f3aae8149a8dcf05b29dada7, type: 3}
   - {fileID: 8300000, guid: af47a6ce65cd13147b8ec5ee0cf3cd31, type: 3}
+  - {fileID: 8300000, guid: b83bf8726a7fac349a54389f0c57cda6, type: 3}
+  - {fileID: 8300000, guid: e58d8bd078f188a4ba314e933b98528b, type: 3}
+  - {fileID: 8300000, guid: ba39bf8baf6d13046889b2d64822381a, type: 3}
+  - {fileID: 8300000, guid: c5cb2ac29e89dbf43a9b644caaad45e6, type: 3}
+  - {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+  - {fileID: 8300000, guid: 7cc057bed53baf34799f52aab3c84800, type: 3}
+  - {fileID: 8300000, guid: 1ed8fb76fc64e4e46847348138782234, type: 3}
   musicSource: {fileID: 1059279213607225837}
   soundEffectSource: {fileID: 1059279213607225838}
   defaultMusicVolume: 0.5

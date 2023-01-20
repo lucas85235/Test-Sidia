@@ -143,8 +143,8 @@ public class GameManager : Singleton<GameManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            HUDCanvas.Instance.PauseMenu();
             Pause();
+            HUDCanvas.Instance.PauseMenu(isPaused);
         }
     }
 
@@ -341,6 +341,7 @@ public class GameManager : Singleton<GameManager>
         if (_player1.CurrentHealth < 1 || _player2.CurrentHealth < 1)
         {
             StopCoroutine(TurnControl());
+            AudioManager.Instance.PlayMusic(2);
 
             if (_player1.CurrentHealth > 0)
                 HUDCanvas.Instance.OpenGameOverPopup("Player 1 Win");

@@ -62,9 +62,11 @@ public class HUDCanvas : Singleton<HUDCanvas>
         alertText.Init(message);
     }
 
-    public void PauseMenu()
+    public void PauseMenu(bool isPaused)
     {
-        pausePopup.Open();
+        if (isPaused)
+            pausePopup.Open();
+        else pausePopup.Close();
     }
 }
 

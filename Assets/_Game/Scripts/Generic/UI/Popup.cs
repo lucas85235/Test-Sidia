@@ -35,6 +35,8 @@ namespace Game.Generics
                 blackBackground.gameObject.SetActive(true);
                 StartCoroutine(LerpColor(blackBackground, blackBackground.color, _settings.blackBackgroundColor, 0.1f, true));
             }
+
+            AudioManager.Instance.PlaySoundEffect(12);
         }
 
         public void Close()
@@ -46,6 +48,7 @@ namespace Game.Generics
             }
 
             Scale(true);
+            AudioManager.Instance.PlaySoundEffect(12);
         }
 
         private void DisableBackground()
